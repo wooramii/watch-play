@@ -724,6 +724,8 @@ function checkAnswer(choice, btn) {
     if (streak%3===0 && stickers.length<MAX_STICKERS) addSticker();
     floatEmoji(btn,'⭐');
     saveState();
+    if (questionCount%5===0) setTimeout(showOverlay, 800);
+    else setTimeout(nextQuestion, 1200);
   } else {
     btn.classList.add('wrong');
     streak = 0;
@@ -732,8 +734,7 @@ function checkAnswer(choice, btn) {
     fb.className = 'feedback wrong';
   }
   updateStars();
-  document.getElementById('nextBtn').style.display = 'block';
-  if (questionCount%5===0 && isCorrect) setTimeout(showOverlay, 800);
+  if (!isCorrect) document.getElementById('nextBtn').style.display = 'block';
 }
 
 // ── 레벨5 드래그 ─────────────────────────────────────
@@ -865,7 +866,7 @@ function checkLevel5() {
 
   const fb = document.getElementById('feedback');
   document.getElementById('checkBtn').style.display = 'none';
-  document.getElementById('nextBtn').style.display  = 'block';
+  if (!isCorrect) document.getElementById('nextBtn').style.display = 'block';
 
   if (isCorrect) {
     score += 50;
@@ -878,6 +879,7 @@ function checkLevel5() {
     floatEmoji(document.getElementById('checkBtn'),'⭐');
     saveState();
     if (questionCount%5===0) setTimeout(showOverlay, 800);
+    else setTimeout(nextQuestion, 1200);
   } else {
     streak = 0;
     // 정답 바늘 보여주기
