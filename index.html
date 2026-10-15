@@ -860,8 +860,21 @@ function checkLevel5() {
   answered = true;
 
   const tgt = currentAnswer;
-  const hOk = userHour === tgt.h || (userHour===12 && tgt.h===12);
-  const mOk = userMinute === tgt.m;
+
+  // 분침 오차 ±5분 허용
+  const minDiff = Math.min(
+    Math.abs(userMinute - tgt.m),
+    60 - Math.abs(userMinute - tgt.m)
+  );
+  const mOk = minDiff <= 5;
+
+  // 시침 오차 ±1시간 허용 (12시간 순환 고려)
+  const hDiff = Math.min(
+    Math.abs(userHour - tgt.h),
+    12 - Math.abs(userHour - tgt.h)
+  );
+  const hOk = hDiff <= 1;
+
   const isCorrect = hOk && mOk;
 
   const fb = document.getElementById('feedback');
